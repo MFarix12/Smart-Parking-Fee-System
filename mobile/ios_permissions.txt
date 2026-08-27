@@ -1,0 +1,2 @@
+<key>NSCameraUsageDescription</key>
+<string>The camera is used to scan vehicle registration plates.</string>

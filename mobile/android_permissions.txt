@@ -1,0 +1,5 @@
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.CAMERA"/>
+
+Local HTTP testing only:
+android:usesCleartextTraffic="true"

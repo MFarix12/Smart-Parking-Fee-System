@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-parking}
+      POSTGRES_USER: ${POSTGRES_USER:-parking}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-parking_change_me}
+    volumes:
+      - parking_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-parking} -d ${POSTGRES_DB:-parking}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-parking}:${POSTGRES_PASSWORD:-parking_change_me}@db:5432/${POSTGRES_DB:-parking}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/models:/app/models:ro
+      - scan_data:/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  parking_db:
+  scan_data:
