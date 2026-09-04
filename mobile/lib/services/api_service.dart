@@ -32,10 +32,14 @@ class ApiService {
     );
     final body = _map(response);
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(body['detail']?.toString() ?? 'Login failed.', response.statusCode);
+      throw ApiException(
+        body['detail']?.toString() ?? 'Login failed.',
+        response.statusCode,
+      );
     }
     final token = body['access_token']?.toString();
-    if (token == null || token.isEmpty) throw ApiException('No token returned.');
+    if (token == null || token.isEmpty)
+      throw ApiException('No token returned.');
     await saveToken(token);
     return body;
   }
@@ -43,7 +47,8 @@ class ApiService {
   Future<Map<String, dynamic>> scan(String direction, XFile image) async {
     final token = await _token();
     final req = http.MultipartRequest(
-      'POST', Uri.parse('${AppConfig.apiBaseUrl}/parking/scan'),
+      'POST',
+      Uri.parse('${AppConfig.apiBaseUrl}/parking/scan'),
     );
     req.headers['Authorization'] = 'Bearer $token';
     req.fields['direction'] = direction;
@@ -51,7 +56,10 @@ class ApiService {
     final response = await http.Response.fromStream(await req.send());
     final body = _map(response);
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(body['detail']?.toString() ?? 'Scan failed.', response.statusCode);
+      throw ApiException(
+        body['detail']?.toString() ?? 'Scan failed.',
+        response.statusCode,
+      );
     }
     return body;
   }
@@ -65,20 +73,30 @@ class ApiService {
 
   Future<String> _token() async {
     final token = await getToken();
-    if (token == null || token.isEmpty) throw ApiException('Not logged in.', 401);
+    if (token == null || token.isEmpty)
+      throw ApiException('Not logged in.', 401);
     return token;
   }
 
-  Future<Map<String, dynamic>> _post(String path, Map<String, dynamic> payload) async {
+  Future<Map<String, dynamic>> _post(
+    String path,
+    Map<String, dynamic> payload,
+  ) async {
     final token = await _token();
     final response = await http.post(
       Uri.parse('${AppConfig.apiBaseUrl}$path'),
-      headers: {'Authorization': 'Bearer $token', 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(payload),
     );
     final body = _map(response);
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(body['detail']?.toString() ?? 'Request failed.', response.statusCode);
+      throw ApiException(
+        body['detail']?.toString() ?? 'Request failed.',
+        response.statusCode,
+      );
     }
     return body;
   }
@@ -91,7 +109,10 @@ class ApiService {
     );
     final body = _map(response);
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ApiException(body['detail']?.toString() ?? 'Request failed.', response.statusCode);
+      throw ApiException(
+        body['detail']?.toString() ?? 'Request failed.',
+        response.statusCode,
+      );
     }
     return body;
   }

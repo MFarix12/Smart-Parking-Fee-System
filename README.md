@@ -51,3 +51,27 @@ The API can start without it, but ANPR scans return 503 until it is installed.
 Decide/validate your actual tariff, privacy/PDPA notices, retention,
 backups, HTTPS domain, payment gateway, barrier hardware protocol,
 camera placement/night performance, dataset licensing, and model licensing.
+
+# Smart Parking Fee System Redesign
+
+This redesign keeps the existing authentication, parking summary, active vehicle,
+history, manual entry/exit and ANPR scan workflow while replacing the basic UI
+with a responsive smart-city dashboard style.
+
+Theme:
+- Deep Navy #0F172A
+- Slate Navy #1E293B
+- Electric Cyan #06B6D4
+- Bright Blue #2563EB
+- Cool White #F8FAFC
+- Success #16A34A
+- Warning #F59E0B
+- Danger #DC2626
+
+Copy the supplied `lib` folder contents into the same locations in your project.
+A new file is included at `lib/theme/app_theme.dart`.
+
+The image upload in `api_service.dart` was changed from MultipartFile.fromPath
+to MultipartFile.fromBytes so the XFile upload is friendlier to Flutter Web/Edge
+while still working with mobile.
+
